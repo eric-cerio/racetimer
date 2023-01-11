@@ -72,3 +72,4 @@ manifest-merger-release-report.txt
 # Secured Gradle variables should not be pushed
 secure.gradle
 secret.gradle
+/.gradle/
