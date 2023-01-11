@@ -9,7 +9,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.appetiser.racetimer.databinding.ActivityMainBinding
+import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +29,18 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
+        checkExpireAppUsage()
+    }
 
+    private fun checkExpireAppUsage() {
+        val currentime = LocalDateTime.now()
+        val expireTIme = LocalDateTime.of(2023, 2, 6, 5, 0, 0, 0)
+        if(currentime.isAfter(expireTIme)) {
+            Toast.makeText(this, "Expired Token", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            Toast.makeText(this, "Ride Safe", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
