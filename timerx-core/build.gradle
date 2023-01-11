@@ -1,0 +1,43 @@
+plugins {
+  id 'maven-publish'
+  id 'com.android.library'
+  id 'kotlin-android'
+}
+
+android {
+  def configs = rootProject.ext
+
+  compileSdkVersion 28
+  defaultConfig {
+    minSdkVersion 19
+    targetSdkVersion 28
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
+}
+
+kotlin {
+  explicitApi()
+}
+
+dependencies {
+  implementation project(':timerx-formatting')
+  implementation "androidx.annotation:annotation:1.1.0"
+}
+
+repositories {
+
+}
+
+// Copy from https://developer.android.com/studio/build/maven-publish-plugin
+afterEvaluate {
+  publishing {
+    publications {
+      release(MavenPublication) {
+        from components.release
+        groupId = 'com.arsvechkarev.timerx'
+        artifactId = 'timerx-core'
+        version = '3.0.0'
+      }
+    }
+  }
+}

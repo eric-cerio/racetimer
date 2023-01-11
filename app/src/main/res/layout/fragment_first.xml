@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.timer.FirstFragment">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvRunType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:textColor="@color/gray"
+        android:text="Seeding Run"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/centerGuideline"
+        android:orientation="horizontal"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent=".50"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/listLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toBottomOf="@id/tvRunType">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRaceId"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Racer ID"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvStartTime"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="Time"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFinishTime"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:text="Finish"
+            android:layout_height="wrap_content"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listRacers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/listLabel"
+        app:layout_constraintBottom_toTopOf="@id/btnViewResult"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="20"
+        tools:listitem="@layout/item_rider"/>
+
+    <Button
+        android:id="@+id/btnViewResult"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/gray"
+        android:text="View Race Result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvTimer"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="00:00.0000"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:maxEms="10"
+        app:layout_constraintBottom_toTopOf="@id/controlLayout"
+        app:layout_constraintVertical_bias="0.954"
+        tools:layout_editor_absoluteX="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/controlLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/timerButtonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btnSetTime"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStart"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:text="Start"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:text="Stop"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReset"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/gray"
+                android:text="Reset"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSetTime"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/yellow"
+            android:enabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Set Time"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
