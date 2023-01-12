@@ -50,7 +50,7 @@ class RiderAdapter(
         fun bind(item: Rider)  {
             binding.tvRaceId.text = item.id.toString()
             binding.tvFinishTime.text = item.finishTime.formatTime()
-            binding.tvStartTime.text = item.startTime
+            binding.tvStartTime.text = item.elapseTime.formatTime()
         }
     }
 }

@@ -71,8 +71,11 @@ class FirstFragment : Fragment() {
                 onError = {
 
                 },
-                onNext =  {
-                    Toast.makeText(requireContext(), "${it.toString()}", Toast.LENGTH_SHORT).show()
+                onNext =  { rider ->
+
+                    ViewUtils.showInputRacerIdDialog(requireContext(), rider.finishTimeFormatted) {
+                        timerViewModel.updateRacerId(it, rider.finishTimeFormatted)
+                    }
                 }
             )
             .addTo(disposable)
@@ -124,6 +127,7 @@ class FirstFragment : Fragment() {
     }
 
     private fun setupViews() {
+        binding.tvRunType.text = arguments?.get("raceName").toString()
         binding.btnStart.clicks()
             .observeOn(scheduler.ui())
             .subscribeBy(

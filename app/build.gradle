@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -42,7 +43,13 @@ dependencies {
     implementation Libs.rxbindingAndroidXCore
     implementation Libs.rxkotlin
 
+    api Libs.room
+    api Libs.roomRx
+    kapt Libs.roomCompiler
+
     implementation 'com.github.yashovardhan99:TimeIt:1.2.0'
+    implementation 'com.github.doyaaaaaken:kotlin-csv-jvm:1.7.0'
+    implementation 'com.github.atwa:filepicker:1.0.4'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

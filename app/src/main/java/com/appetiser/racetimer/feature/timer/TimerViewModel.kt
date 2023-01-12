@@ -54,13 +54,28 @@ class TimerViewModel: ViewModel() {
 
         riderList.add(
             Rider(
-                tempRaceId--,
-                "0:0",
-                0L,
-                stopwatch.currentTimeInMillis
+                id = tempRaceId--,
+                name ="temp name",
+                category = "Hard Tail",
+                startTimeFormatted = "00:00.000",
+                elapseTime = 0L,
+                finishTime = stopwatch.currentTimeInMillis,
+                finishTimeFormatted = stopwatch.currentFormattedTime.toString()
             )
         )
 
         _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))
     }
-}
+
+    fun updateRacerId(racerId: String, finishTimeFormatted: String) {
+        riderList
+            .find {
+                it.finishTimeFormatted == finishTimeFormatted
+            }.apply {
+                this?.id = racerId.toInt()
+                this?.elapseTime = stopwatch.currentTimeInMillis - racerId.toInt() * 30000
+            }
+
+        _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))
+    }
+  }

@@ -3,13 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/ImportFragment">
+
+    <fragment
+        android:id="@+id/ImportFragment"
+        android:name="com.appetiser.racetimer.feature.splash.ImportFragment"
+        android:label="Import CSV"
+        tools:layout="@layout/fragment_import">
+
+        <action
+            android:id="@+id/action_ImportFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment">
+
+            <argument
+                android:name="raceName"
+                app:argType="string"
+                app:nullable="false"/>
+
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.appetiser.racetimer.feature.timer.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
+
+        <argument
+            android:name="raceName"
+            app:argType="string"
+            app:nullable="false"/>
+
+
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
