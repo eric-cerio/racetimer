@@ -14,7 +14,8 @@ data class Rider(
     var startTimeFormatted: String = "00:00.000",
     var elapseTime: Long = 0L,
     var finishTime: Long = 0L,
-    var finishTimeFormatted: String = "00:00.000"
+    var finishTimeFormatted: String = "00:00.000",
+    var runType: String = "seeding"
 ) {
     override fun toString(): String {
         return "$id - $finishTime"

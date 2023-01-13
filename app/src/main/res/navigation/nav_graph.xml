@@ -20,6 +20,11 @@
                 app:argType="string"
                 app:nullable="false"/>
 
+            <argument
+                android:name="racerInterval"
+                app:nullable="false"
+                app:argType="integer"/>
+
         </action>
     </fragment>
 
@@ -34,6 +39,10 @@
             app:argType="string"
             app:nullable="false"/>
 
+        <argument
+            android:name="racerInterval"
+            app:nullable="false"
+            app:argType="integer"/>
 
 
         <action

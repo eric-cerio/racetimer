@@ -1,5 +1,6 @@
 package com.appetiser.racetimer.feature.splash
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.appetiser.racetimer.feature.scheduler.SchedulerProvider
@@ -30,7 +31,7 @@ class ImportViewModel(private val repository: RiderRepository): ViewModel() {
             .observeOn(scheduler.ui())
             .subscribeBy(
                 onError = {
-
+                          Log.e(this.javaClass.name, it.message.orEmpty())
                 },
                 onSuccess = {
                     importCSV(it)
@@ -46,7 +47,7 @@ class ImportViewModel(private val repository: RiderRepository): ViewModel() {
             .observeOn(scheduler.ui())
             .subscribeBy(
                 onError = {
-
+                    Log.e(this.javaClass.name, it.message.orEmpty())
                 },
                 onComplete = {
                     _state

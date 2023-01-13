@@ -18,6 +18,7 @@ import com.appetiser.racetimer.databinding.FragmentImportBinding
 import com.appetiser.racetimer.feature.scheduler.SchedulerProvider
 import com.atwa.filepicker.core.FilePicker
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.jakewharton.rxbinding3.widget.textChangeEvents
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -80,12 +81,36 @@ class ImportFragment : Fragment() {
                 }
             )
             .addTo(disposable)
+
+        binding.inputRaceName.textChangeEvents()
+            .map {
+                it.text.isNotEmpty()
+            }
+            .subscribeOn(scheduler.ui())
+            .observeOn(scheduler.ui())
+            .subscribeBy(
+                onError = {
+
+                },
+                onNext = {
+                    binding.btnImportCSV.isEnabled = it
+                }
+            )
+            .addTo(disposable)
+
     }
 
     private fun handleState(it: ImportState?) {
         when(it){
             ImportState.SuccessImportingCSV -> {
-                findNavController().navigate(R.id.action_ImportFragment_to_FirstFragment, bundleOf(Pair("raceName", binding.inputRaceName.text.toString())))
+                findNavController()
+                    .navigate(
+                        R.id.action_ImportFragment_to_FirstFragment,
+                        bundleOf(
+                            Pair("raceName", binding.inputRaceName.text.toString()),
+                            Pair("racerInterval", binding.inputRacerInterval.text.toString().toInt())
+                        )
+                    )
             }
             else -> {
 

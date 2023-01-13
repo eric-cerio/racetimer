@@ -1,5 +1,6 @@
 package com.appetiser.racetimer.feature.timer
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.appetiser.racetimer.model.Rider
 import com.google.android.material.textview.MaterialTextView
@@ -67,13 +68,16 @@ class TimerViewModel: ViewModel() {
         _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))
     }
 
-    fun updateRacerId(racerId: String, finishTimeFormatted: String) {
+    fun updateRacerId(racerId: String, finishTimeFormatted: String, runType: String, raceInterval: Int = 0) {
         riderList
             .find {
                 it.finishTimeFormatted == finishTimeFormatted
             }.apply {
+                val finishTime = this?.finishTime ?: 0
                 this?.id = racerId.toInt()
-                this?.elapseTime = stopwatch.currentTimeInMillis - racerId.toInt() * 30000
+                Log.e("calculation", "${finishTime} - ${ ((racerId.toInt()-1) * (raceInterval * 1000))} = ${finishTime - ((racerId.toInt()-1) * (raceInterval * 1000))}")
+                this?.elapseTime = finishTime - ((racerId.toInt()-1) * (raceInterval * 1000))
+                this?.runType = runType
             }
 
         _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))

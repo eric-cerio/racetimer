@@ -1,16 +1,16 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_enabled="false"
-        android:drawable="@color/gray" />
+        android:drawable="@drawable/bg_btn_disabled" />
     <item
         android:state_pressed="true"
         android:state_enabled="true"
-        android:drawable="@color/yellow" />
+        android:drawable="@drawable/bg_btn_enabled" />
     <item
         android:state_focused="true"
         android:state_enabled="true"
-        android:drawable="@color/yellow" />
+        android:drawable="@drawable/bg_btn_enabled" />
     <item
         android:state_enabled="true"
-        android:drawable="@color/yellow" />
+        android:drawable="@drawable/bg_btn_enabled" />
 </selector>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,16 +20,21 @@ import com.appetiser.racetimer.feature.timer.adapter.RiderAdapter
 import com.appetiser.racetimer.utils.ViewUtils
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChangeEvents
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import java.util.concurrent.TimeUnit
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
 
+    private val listLayoutManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+    }
     private val disposable: CompositeDisposable = CompositeDisposable()
     private val scheduler: SchedulerProvider =  SchedulerProvider.getInstance()
 
@@ -61,6 +67,21 @@ class FirstFragment : Fragment() {
         setupViewObservable()
         setupVmObserver()
         setupRecyclerView()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                ViewUtils.showConfirmDialog(
+                    requireContext(),
+                    "End Race",
+                    "Are you sure to end race?",
+                    "Yes",
+                    "No",
+                    {
+                        findNavController().navigateUp()
+                    }
+                )
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -72,17 +93,20 @@ class FirstFragment : Fragment() {
 
                 },
                 onNext =  { rider ->
-
                     ViewUtils.showInputRacerIdDialog(requireContext(), rider.finishTimeFormatted) {
-                        timerViewModel.updateRacerId(it, rider.finishTimeFormatted)
+                        timerViewModel.updateRacerId(
+                            it,
+                            rider.finishTimeFormatted,
+                            arguments?.get("raceName").toString(),
+                            arguments?.get("racerInterval").toString().toInt()
+                        )
                     }
                 }
             )
             .addTo(disposable)
-
         with(binding.listRacers) {
             adapter = rideAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            layoutManager = listLayoutManager
 
             addItemDecoration(
                 BottomTopSpaceMarginItemDecoration(
@@ -115,7 +139,19 @@ class FirstFragment : Fragment() {
             }
 
             is TimerState.UpdateRiders -> {
-                rideAdapter.submitList(it.list.toList())
+                rideAdapter.submitList(it.list.toList().reversed())
+                Observable.timer(1, TimeUnit.SECONDS)
+                    .subscribeOn(scheduler.io())
+                    .observeOn(scheduler.ui())
+                    .subscribeBy(
+                        onError = {
+
+                        },
+                        onNext = {
+                            listLayoutManager.scrollToPositionWithOffset(0,0)
+                        }
+                    )
+                    .addTo(disposable)
             }
 
             is TimerState.GetRacerTime -> {
