@@ -47,7 +47,14 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment">
+
+            <argument
+                android:name="raceName"
+                app:argType="string"
+                app:nullable="false"/>
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -55,8 +62,15 @@
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
+        <argument
+            android:name="raceName"
+            app:argType="string"
+            app:nullable="false"/>
+
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/FirstFragment">
+
+        </action>
     </fragment>
 </navigation>

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -16,6 +18,7 @@ import com.appetiser.racetimer.R
 import com.appetiser.racetimer.RaceTimerApplication
 import com.appetiser.racetimer.databinding.FragmentImportBinding
 import com.appetiser.racetimer.feature.scheduler.SchedulerProvider
+import com.appetiser.racetimer.utils.ViewUtils
 import com.atwa.filepicker.core.FilePicker
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.jakewharton.rxbinding3.widget.textChangeEvents
@@ -64,7 +67,38 @@ class ImportFragment : Fragment() {
             }
         }
 
+        binding.btnResumeRace.setOnClickListener {
+            importViewModel.hasRiders()
+        }
+
+        binding
+            .inputRaceName
+            .setOnClickListener {
+                binding.spinnerRaceType.performClick()
+            }
+
+        binding
+            .spinnerRaceType
+            .onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                binding.inputRaceName.setText(p0?.adapter?.getItem(p2).toString())
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                binding.inputRaceName.setText("")
+            }
+        }
         setupVmObserver()
+        setupSpinner()
+    }
+
+    private fun setupSpinner() {
+        val arrayAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            listOf<String>("Seeding Run", "Final Run")
+        )
+        binding.spinnerRaceType.adapter = arrayAdapter
     }
 
     private fun setupVmObserver() {
@@ -111,6 +145,33 @@ class ImportFragment : Fragment() {
                             Pair("racerInterval", binding.inputRacerInterval.text.toString().toInt())
                         )
                     )
+            }
+
+            ImportState.HasRider -> {
+                findNavController()
+                    .navigate(
+                        R.id.action_ImportFragment_to_FirstFragment,
+                        bundleOf(
+                            Pair("raceName", binding.inputRaceName.text.toString()),
+                            Pair("racerInterval", binding.inputRacerInterval.text.toString().toInt())
+                        )
+                    )
+            }
+
+            ImportState.NoRider -> {
+                ViewUtils.showConfirmDialog(
+                    requireContext(),
+                    "No Riders",
+                    "Race has no riders, please import riders data (.csv file)",
+                    "OK",
+                    "Cancel",
+                    {
+                        binding.btnImportCSV.performClick()
+                    },
+                    {
+
+                    }
+                )
             }
             else -> {
 

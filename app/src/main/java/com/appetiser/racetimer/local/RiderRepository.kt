@@ -26,6 +26,10 @@ class RiderRepository(private val riderDao: RiderDao) {
         return riderDao.insert(rider)
     }
 
+    fun getRider(id: Int): Single<Rider> {
+        return riderDao.getRider(id)
+    }
+
     fun insertAllRiders(list: List<Rider>): Completable {
         return riderDao.insertAll(list)
     }
@@ -39,14 +43,18 @@ class RiderRepository(private val riderDao: RiderDao) {
                 Log.e("Riders count", "${it.size}")
                 Log.e("Riders", it.toString())
 
-
-
                 it.map {
                     Rider(
-                        id = it[0].toString().toInt()
+                        id = it[0].toString().toInt(),
+                        name = it[1].toString(),
+                        category = it[2].toString(),
+                        categoryId = it[4].toInt()
                     )
                 }
             }
+    }
 
+    fun deleteAll(): Completable {
+        return riderDao.deleteAll()
     }
 }

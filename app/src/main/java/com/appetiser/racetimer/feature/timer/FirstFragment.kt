@@ -7,16 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.appetiser.racetimer.MainActivity
 import com.appetiser.racetimer.R
+import com.appetiser.racetimer.RaceTimerApplication
 import com.appetiser.racetimer.databinding.FragmentFirstBinding
+import com.appetiser.racetimer.ext.formatTime
 import com.appetiser.racetimer.ext.toPx
 import com.appetiser.racetimer.feature.scheduler.SchedulerProvider
+import com.appetiser.racetimer.feature.splash.ImportViewModelFactory
 import com.appetiser.racetimer.feature.timer.adapter.BottomTopSpaceMarginItemDecoration
 import com.appetiser.racetimer.feature.timer.adapter.RiderAdapter
+import com.appetiser.racetimer.model.Rider
 import com.appetiser.racetimer.utils.ViewUtils
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChangeEvents
@@ -38,7 +44,9 @@ class FirstFragment : Fragment() {
     private val disposable: CompositeDisposable = CompositeDisposable()
     private val scheduler: SchedulerProvider =  SchedulerProvider.getInstance()
 
-    private val timerViewModel by viewModels<TimerViewModel>()
+    private val timerViewModel by viewModels<TimerViewModel> {
+        TimerViewModelFactory((((activity as MainActivity)).application as RaceTimerApplication).repository)
+    }
 
     private val rideAdapter by lazy {
         RiderAdapter(disposable)
@@ -66,7 +74,17 @@ class FirstFragment : Fragment() {
         setupViews()
         setupViewObservable()
         setupVmObserver()
-        setupRecyclerView()
+        if(timerViewModel.riderList.isNotEmpty()) {
+            binding.listRacers.adapter = rideAdapter
+            binding.listRacers.addItemDecoration(
+                BottomTopSpaceMarginItemDecoration(
+                    verticalMargin = 8.toPx(requireContext())
+                )
+            )
+            rideAdapter.submitList(timerViewModel.riderList)
+        } else {
+            setupRecyclerView()
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -104,6 +122,7 @@ class FirstFragment : Fragment() {
                 }
             )
             .addTo(disposable)
+
         with(binding.listRacers) {
             adapter = rideAdapter
             layoutManager = listLayoutManager
@@ -132,14 +151,24 @@ class FirstFragment : Fragment() {
             .addTo(disposable)
     }
 
-    private fun handleState(it: TimerState?) {
-        when(it) {
+    private fun setTopRacer(list: List<Rider>) {
+        val rider = list.filter {
+            it.id > 0
+        }.minWith(Comparator.comparingLong {
+            it.elapseTime
+        })
+
+        binding.tvTopPlacer.text = String.format("Racer %d / Time: %s", rider.id, rider.elapseTime.formatTime())
+    }
+
+    private fun handleState(state: TimerState?) {
+        when(state) {
             is TimerState.UpdateTime -> {
-                binding.tvTimer.text = it.time
+                binding.tvTimer.text = state.time
             }
 
             is TimerState.UpdateRiders -> {
-                rideAdapter.submitList(it.list.toList().reversed())
+                rideAdapter.submitList(state.list.toList().reversed())
                 Observable.timer(1, TimeUnit.SECONDS)
                     .subscribeOn(scheduler.io())
                     .observeOn(scheduler.ui())
@@ -149,13 +178,15 @@ class FirstFragment : Fragment() {
                         },
                         onNext = {
                             listLayoutManager.scrollToPositionWithOffset(0,0)
+                            setTopRacer(state.list)
+
                         }
                     )
                     .addTo(disposable)
             }
 
             is TimerState.GetRacerTime -> {
-                Toast.makeText(requireContext(), "Racer time ${it.time}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Racer time ${state.time}", Toast.LENGTH_SHORT).show()
             } else -> {
 
             }
@@ -239,17 +270,20 @@ class FirstFragment : Fragment() {
                         "Yes",
                         "No",
                         {
-                            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                            findNavController().navigate(
+                                R.id.action_FirstFragment_to_SecondFragment,
+                                bundleOf(
+                                    Pair("raceName", arguments?.get("raceName").toString())
+                                )
+                            )
                         },
                         {
 
                         }
                     )
-
                 }
             )
             .addTo(disposable)
-
     }
 
     private fun setupViewObservable() {
@@ -258,6 +292,5 @@ class FirstFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
     }
 }

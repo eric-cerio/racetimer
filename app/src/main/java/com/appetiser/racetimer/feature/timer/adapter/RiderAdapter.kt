@@ -50,7 +50,12 @@ class RiderAdapter(
         fun bind(item: Rider)  {
             binding.tvRaceId.text = item.id.toString()
             binding.tvFinishTime.text = item.finishTime.formatTime()
-            binding.tvStartTime.text = item.elapseTime.formatTime()
+            if(item.runType == "Seeding Run") {
+                binding.tvStartTime.text = item.seedingTime.formatTime()
+            } else {
+                binding.tvStartTime.text = item.finalTime.formatTime()
+            }
+
         }
     }
 }

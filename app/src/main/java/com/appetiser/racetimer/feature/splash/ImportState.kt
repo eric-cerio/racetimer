@@ -4,4 +4,7 @@ sealed class ImportState {
 
     object SuccessImportingCSV: ImportState()
 
+    object HasRider: ImportState()
+
+    object NoRider: ImportState()
 }

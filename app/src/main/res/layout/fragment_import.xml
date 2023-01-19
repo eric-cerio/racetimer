@@ -36,9 +36,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:clickable="true"
+            android:focusable="false"
             tools:ignore="Autofill,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spinnerRaceType"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="@id/txtLayoutRaceName"
+        app:layout_constraintStart_toStartOf="@id/txtLayoutRaceName"
+        app:layout_constraintTop_toBottomOf="@id/txtLayoutRaceName" />
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtLayoutRacerInterval"
@@ -71,5 +84,16 @@
         android:enabled="true"
         app:layout_constraintTop_toBottomOf="@+id/txtLayoutRacerInterval"
         android:text="Import CSV"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnResumeRace"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:layout_height="50dp"
+        android:background="@color/green"
+        android:enabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/btnImportCSV"
+        android:text="Resume Race CSV"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,30 @@ class ImportViewModel(private val repository: RiderRepository): ViewModel() {
     }
     val state: Observable<ImportState> = _state
 
+    fun hasRiders() {
+        repository
+            .allRider
+            .subscribeOn(scheduler.io())
+            .observeOn(scheduler.ui())
+            .subscribeBy(
+                onError = {
+
+                },
+                onSuccess = {
+                    _state
+                        .onNext(
+                            if(it.isEmpty()) {
+                                ImportState.NoRider
+                            } else {
+                                ImportState.HasRider
+                            }
+                        )
+
+                }
+            )
+            .addTo(disposable)
+    }
+
     fun parseCSV(file: File) {
         repository
             .parseCSV(file)
@@ -42,7 +66,8 @@ class ImportViewModel(private val repository: RiderRepository): ViewModel() {
 
     fun importCSV(riders: List<Rider>) {
         repository
-            .insertAllRiders(riders)
+            .deleteAll()
+            .andThen(repository.insertAllRiders(riders))
             .subscribeOn(scheduler.io())
             .observeOn(scheduler.ui())
             .subscribeBy(

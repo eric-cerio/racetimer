@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkExpireAppUsage() {
         val currentime = LocalDateTime.now()
-        val expireTIme = LocalDateTime.of(2023, 2, 6, 5, 0, 0, 0)
+        val expireTIme = LocalDateTime.of(2023, 2, 20, 5, 0, 0, 0)
         if(currentime.isAfter(expireTIme)) {
             Toast.makeText(this, "Expired Token", Toast.LENGTH_SHORT).show()
             finish()

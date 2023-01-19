@@ -29,4 +29,7 @@ interface RiderDao {
 
     @Query("DELETE FROM riders")
     fun deleteAll(): Completable
+
+    @Query("SELECT * FROM  riders WHERE id=:id")
+    fun getRider(id: Int): Single<Rider>
 }
