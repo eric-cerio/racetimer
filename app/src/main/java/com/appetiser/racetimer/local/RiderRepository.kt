@@ -1,9 +1,12 @@
 package com.appetiser.racetimer.local
 
+import android.os.Environment
 import android.util.Log
 import androidx.annotation.WorkerThread
+import com.appetiser.racetimer.model.ResultRow
 import com.appetiser.racetimer.model.Rider
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
@@ -54,7 +57,36 @@ class RiderRepository(private val riderDao: RiderDao) {
             }
     }
 
+    fun exportToCSV(list: List<ResultRow>, raceName: String) : Single<String> {
+       return createCSVContent(list, raceName, list[0].category)
+    }
+
     fun deleteAll(): Completable {
         return riderDao.deleteAll()
+    }
+
+    fun createCSVContent(list: List<ResultRow>, raceName: String, category: String): Single<String> {
+        return Single.create { emitter ->
+            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"/${raceName.replace(" ","")}_${category}.csv")
+            file.createNewFile()
+            if(file.exists()) {
+                val row1 = listOf("Rank","Name", "Race ID","Category", "Start Time", "time ", "Finish Time" )
+                val rows = listOf(list.map {
+                    it.toList()
+                })
+//                csvWriter().writeAll(listOf(row1, rows ), file)
+//                emitter.onComplete()
+
+                csvWriter().open(file) {
+                    writeRow(row1)
+                    rows.forEach {
+                        writeRows(it)
+                    }
+                }
+                emitter.onSuccess("${raceName.replace(" ","")}_${category}.csv")
+            } else {
+                emitter.onError(Throwable("Error"))
+            }
+        }
     }
 }

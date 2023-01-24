@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -88,7 +90,7 @@ class SecondFragment : Fragment() {
         binding
             .btnImportCSV
             .setOnClickListener {
-                findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+                resultViewModel.exportResult(arguments?.get("raceName").toString())
             }
     }
 
@@ -112,6 +114,24 @@ class SecondFragment : Fragment() {
         when(it) {
             is ResultState.GetAllRiders -> {
                 resultAdapter.submitList(it.list)
+            }
+            is ResultState.ExportSuccess -> {
+                ViewUtils.showConfirmDialog(
+                    requireContext(),
+                    "Export CSV Success",
+                    "${it.path} file is saved in Downloads Folder",
+                    "OK",
+                    "",
+                    {
+
+                    },
+                    {
+
+                    }
+                )
+            }
+            is ResultState.Error -> {
+                Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG).show()
             }
             else -> {
             }
