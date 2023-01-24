@@ -33,9 +33,6 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
 
-    private val listLayoutManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-    }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -125,7 +122,7 @@ class SecondFragment : Fragment() {
 
         with(binding.listRacers) {
             adapter = resultAdapter
-           layoutManager = listLayoutManager
+           layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
             addItemDecoration(
                 BottomTopSpaceMarginItemDecoration(

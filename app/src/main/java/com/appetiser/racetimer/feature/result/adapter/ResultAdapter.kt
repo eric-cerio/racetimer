@@ -35,7 +35,7 @@ class ResultAdapter(
 
     class ResultViewHolder(val binding: ItemRiderRankBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Rider)  {
-            binding.tvRank.text = adapterPosition.toString()
+            binding.tvRank.text = (adapterPosition + 1).toString()
             binding.tvCategory.text = item.category
             binding.tvNameRaceId.text = "${item.name} #${item.id}"
             binding.tvTime.text = item.elapseTime.formatTime()

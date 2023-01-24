@@ -92,6 +92,6 @@
         android:background="@drawable/bg_btn_set_time"
         android:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Import CSV"/>
+        android:text="Export to CSV"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

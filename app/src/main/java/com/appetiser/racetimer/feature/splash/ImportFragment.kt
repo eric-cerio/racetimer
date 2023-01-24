@@ -142,7 +142,7 @@ class ImportFragment : Fragment() {
                         R.id.action_ImportFragment_to_FirstFragment,
                         bundleOf(
                             Pair("raceName", binding.inputRaceName.text.toString()),
-                            Pair("racerInterval", binding.inputRacerInterval.text.toString().toInt())
+                            Pair("racerInterval", if(binding.inputRacerInterval.text.toString().isEmpty()) 30 else binding.inputRacerInterval.text.toString().toInt())
                         )
                     )
             }
@@ -153,7 +153,7 @@ class ImportFragment : Fragment() {
                         R.id.action_ImportFragment_to_FirstFragment,
                         bundleOf(
                             Pair("raceName", binding.inputRaceName.text.toString()),
-                            Pair("racerInterval", binding.inputRacerInterval.text.toString().toInt())
+                            Pair("racerInterval", if(binding.inputRacerInterval.text.toString().isEmpty()) 30 else binding.inputRacerInterval.text.toString().toInt())
                         )
                     )
             }

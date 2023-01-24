@@ -57,6 +57,9 @@ class TimerViewModel(private val repository: RiderRepository): ViewModel() {
     fun resetTimer() {
         stopwatch.reset()
         stopwatch.setTime(0, TimeUnit.MILLISECONDS)
+        riderList.clear()
+        tempRaceId  = -1
+        _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))
         _state.onNext(TimerState.UpdateTime(stopwatch.currentFormattedTime.toString()))
     }
 

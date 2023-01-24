@@ -38,9 +38,7 @@ import java.util.concurrent.TimeUnit
  */
 class FirstFragment : Fragment() {
 
-    private val listLayoutManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-    }
+
     private val disposable: CompositeDisposable = CompositeDisposable()
     private val scheduler: SchedulerProvider =  SchedulerProvider.getInstance()
 
@@ -74,17 +72,18 @@ class FirstFragment : Fragment() {
         setupViews()
         setupViewObservable()
         setupVmObserver()
-        if(timerViewModel.riderList.isNotEmpty()) {
-            binding.listRacers.adapter = rideAdapter
-            binding.listRacers.addItemDecoration(
-                BottomTopSpaceMarginItemDecoration(
-                    verticalMargin = 8.toPx(requireContext())
-                )
-            )
-            rideAdapter.submitList(timerViewModel.riderList)
-        } else {
-            setupRecyclerView()
-        }
+        setupRecyclerView()
+//        if(timerViewModel.riderList.isNotEmpty()) {
+//            binding.listRacers.adapter = rideAdapter
+//            binding.listRacers.addItemDecoration(
+//                BottomTopSpaceMarginItemDecoration(
+//                    verticalMargin = 8.toPx(requireContext())
+//                )
+//            )
+//            rideAdapter.submitList(timerViewModel.riderList)
+//        } else {
+//            setupRecyclerView()
+//        }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -125,7 +124,7 @@ class FirstFragment : Fragment() {
 
         with(binding.listRacers) {
             adapter = rideAdapter
-            layoutManager = listLayoutManager
+            layoutManager =  LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
             addItemDecoration(
                 BottomTopSpaceMarginItemDecoration(
@@ -177,7 +176,7 @@ class FirstFragment : Fragment() {
 
                         },
                         onNext = {
-                            listLayoutManager.scrollToPositionWithOffset(0,0)
+                            binding.listRacers.scrollToPosition(0)
                             setTopRacer(state.list)
 
                         }
