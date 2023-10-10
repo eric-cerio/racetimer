@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/raceBanner"
-        android:src="@drawable/screen_shot_2023_01_11_at_1_09_37_pm"
+        android:src="@drawable/screenshot_2023_06_04_at_8_43_04_am"
         android:layout_width="0dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"

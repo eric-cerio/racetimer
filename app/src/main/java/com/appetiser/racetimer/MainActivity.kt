@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        checkExpireAppUsage()
+        //checkExpireAppUsage()
     }
 
     private fun checkExpireAppUsage() {
         val currentime = LocalDateTime.now()
-        val expireTIme = LocalDateTime.of(2023, 2, 20, 5, 0, 0, 0)
+        val expireTIme = LocalDateTime.of(2023, 6, 20, 5, 0, 0, 0)
         if(currentime.isAfter(expireTIme)) {
             Toast.makeText(this, "Expired Token", Toast.LENGTH_SHORT).show()
             finish()

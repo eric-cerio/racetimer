@@ -85,6 +85,7 @@ class FirstFragment : Fragment() {
 //            setupRecyclerView()
 //        }
 
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 ViewUtils.showConfirmDialog(
@@ -99,6 +100,7 @@ class FirstFragment : Fragment() {
                 )
             }
         })
+        timerViewModel.getCategoryRiderRange()
     }
 
     private fun setupRecyclerView() {
@@ -184,11 +186,19 @@ class FirstFragment : Fragment() {
                     .addTo(disposable)
             }
 
+            is TimerState.ShowRiderIDs ->  {
+                binding.tvRunType.text = String.format(
+                    "%s \n%s", arguments?.get("raceName").toString(), state.riderRange
+                )
+            }
+
             is TimerState.GetRacerTime -> {
                 Toast.makeText(requireContext(), "Racer time ${state.time}", Toast.LENGTH_SHORT).show()
             } else -> {
 
             }
+
+
         }
     }
 

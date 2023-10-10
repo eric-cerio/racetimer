@@ -82,6 +82,28 @@ class TimerViewModel(private val repository: RiderRepository): ViewModel() {
         _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))
     }
 
+    fun getCategoryRiderRange() {
+        repository
+            .allRider
+            .subscribeOn(scheduler.io())
+            .observeOn(scheduler.ui())
+            .subscribeBy(
+                onError = {
+
+                },
+                onSuccess = { rider ->
+                    _state
+                        .onNext(
+                            TimerState.ShowRiderIDs(
+                                String.format("%s - %s", rider.first().id, rider.last().id)
+                            )
+                        )
+                }
+            )
+            .addTo(disposable)
+
+    }
+
     fun updateRacerId(racerId: String, finishTimeFormatted: String, runType: String, raceInterval: Int = 0) {
 
         repository
@@ -128,7 +150,7 @@ class TimerViewModel(private val repository: RiderRepository): ViewModel() {
             .observeOn(scheduler.ui())
             .subscribeBy(
                 onError = {
-
+                          Log.e("TimerViewModel", it.message.orEmpty())
                 },
                 onComplete = {
                     _state.onNext(TimerState.UpdateRiders(riderList.toMutableList()))

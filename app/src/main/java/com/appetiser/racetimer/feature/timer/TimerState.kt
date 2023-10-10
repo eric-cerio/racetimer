@@ -10,4 +10,6 @@ sealed class TimerState {
 
     class UpdateRiders(val list: List<Rider>): TimerState()
 
+    class ShowRiderIDs(val riderRange: String): TimerState()
+
 }

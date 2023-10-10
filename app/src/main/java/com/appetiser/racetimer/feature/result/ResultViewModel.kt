@@ -50,20 +50,40 @@ class ResultViewModel(private val repository: RiderRepository): ViewModel() {
     }
 
     fun splitRidersByCategory(list: List<Rider>): List<Rider> {
-        val hardtailRiders = list.filter { rider -> rider.category == "Hardtail" }.sortedWith(
+        val bfs = list.filter { rider -> rider.category == "BFS" }.sortedWith(
             Comparator.comparing {
                 it.elapseTime
             }
         )
-        val fullsusRiders = list.filter { rider -> rider.category == "Fullsus" }.sortedWith(
+        val bht = list.filter { rider -> rider.category == "BHT" }.sortedWith(
             Comparator.comparing {
                 it.elapseTime
             }
         )
 
+        val afs = list.filter { rider -> rider.category == "AFS" }.sortedWith(
+            Comparator.comparing {
+                it.elapseTime
+            }
+        )
+        val aht = list.filter { rider -> rider.category == "AHT" }.sortedWith(
+            Comparator.comparing {
+                it.elapseTime
+            }
+        )
+        val elite = list.filter { rider -> rider.category == "Elite" }.sortedWith(
+            Comparator.comparing {
+                it.elapseTime
+            }
+        )
+
+
         val allRiders = mutableListOf<Rider>()
-        allRiders.addAll(hardtailRiders)
-        allRiders.addAll(fullsusRiders)
+        allRiders.addAll(bfs)
+        allRiders.addAll(bht)
+        allRiders.addAll(afs)
+        allRiders.addAll(aht)
+        allRiders.addAll(elite)
         return allRiders
     }
 
@@ -80,11 +100,11 @@ class ResultViewModel(private val repository: RiderRepository): ViewModel() {
                         id = rider.id,
                         category = rider.category,
                         startTimeFormatted = rider.startTimeFormatted,
-                        finishTime = rider.finishTimeFormatted.toString(),
+                        finishTime = rider.finishTimeFormatted,
                         finishTimeFormatted = if(rider.runType == "Seeding Run") {
                             rider.seedingTime.formatTime()
                         } else {
-                            rider.finishTime.formatTime()
+                            rider.finalTime.formatTime()
                         }
                     )
                 }
